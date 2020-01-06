@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.windsound.project.mapper.UserMapper">
+    
+    <resultMap type="User" id="UserResult">
+        <result property="id"    column="id"    />
+        <result property="openId"    column="open_id"    />
+        <result property="nickName"    column="nick_name"    />
+        <result property="headPhoto"    column="head_photo"    />
+        <result property="gender"    column="gender"    />
+        <result property="accentType"    column="accent_type"    />
+        <result property="isStandard"    column="is_standard"    />
+        <result property="ageLevel"    column="age_level"    />
+        <result property="tel"    column="tel"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="speakerType"    column="speaker_type"    />
+    </resultMap>
+	
+	<sql id="selectUserVo">
+        select id, open_id, nick_name, head_photo, gender, accent_type, is_standard, age_level, tel, create_time, speaker_type from wx_user
+    </sql>
+	
+    <select id="selectUserList" parameterType="User" resultMap="UserResult">
+        <include refid="selectUserVo"/>
+        <where>  
+            <if test="id != null  and id != '' "> and id = #{id}</if>
+             <if test="openId != null  and openId != '' "> and open_id = #{openId}</if>
+             <if test="nickName != null  and nickName != '' "> and nick_name = #{nickName}</if>
+             <if test="headPhoto != null  and headPhoto != '' "> and head_photo = #{headPhoto}</if>
+             <if test="gender != null  and gender != '' "> and gender = #{gender}</if>
+             <if test="accentType != null  and accentType != '' "> and accent_type = #{accentType}</if>
+             <if test="isStandard != null "> and is_standard = #{isStandard}</if>
+             <if test="ageLevel != null  and ageLevel != '' "> and age_level = #{ageLevel}</if>
+             <if test="tel != null  and tel != '' "> and tel = #{tel}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="speakerType != null  and speakerType != '' "> and speaker_type = #{speakerType}</if>
+         </where>
+    </select>
+    
+    <select id="selectUserById" parameterType="String" resultMap="UserResult">
+        <include refid="selectUserVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertUser" parameterType="User">
+        insert into wx_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  and id != ''  ">id,</if>
+			<if test="openId != null  and openId != ''  ">open_id,</if>
+			<if test="nickName != null  and nickName != ''  ">nick_name,</if>
+			<if test="headPhoto != null  and headPhoto != ''  ">head_photo,</if>
+			<if test="gender != null  and gender != ''  ">gender,</if>
+			<if test="accentType != null  and accentType != ''  ">accent_type,</if>
+			<if test="isStandard != null  ">is_standard,</if>
+			<if test="ageLevel != null  and ageLevel != ''  ">age_level,</if>
+			<if test="tel != null  and tel != ''  ">tel,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="speakerType != null  and speakerType != ''  ">speaker_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  and id != ''  ">#{id},</if>
+			<if test="openId != null  and openId != ''  ">#{openId},</if>
+			<if test="nickName != null  and nickName != ''  ">#{nickName},</if>
+			<if test="headPhoto != null  and headPhoto != ''  ">#{headPhoto},</if>
+			<if test="gender != null  and gender != ''  ">#{gender},</if>
+			<if test="accentType != null  and accentType != ''  ">#{accentType},</if>
+			<if test="isStandard != null  ">#{isStandard},</if>
+			<if test="ageLevel != null  and ageLevel != ''  ">#{ageLevel},</if>
+			<if test="tel != null  and tel != ''  ">#{tel},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="speakerType != null  and speakerType != ''  ">#{speakerType},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateUser" parameterType="User">
+        update wx_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="openId != null  and openId != ''  ">open_id = #{openId},</if>
+            <if test="nickName != null  and nickName != ''  ">nick_name = #{nickName},</if>
+            <if test="headPhoto != null  and headPhoto != ''  ">head_photo = #{headPhoto},</if>
+            <if test="gender != null  and gender != ''  ">gender = #{gender},</if>
+            <if test="accentType != null  and accentType != ''  ">accent_type = #{accentType},</if>
+            <if test="isStandard != null  ">is_standard = #{isStandard},</if>
+            <if test="ageLevel != null  and ageLevel != ''  ">age_level = #{ageLevel},</if>
+            <if test="tel != null  and tel != ''  ">tel = #{tel},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="speakerType != null  and speakerType != ''  ">speaker_type = #{speakerType},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteUserById" parameterType="String">
+        delete from wx_user where id = #{id}
+    </delete>
+	
+    <delete id="deleteUserByIds" parameterType="String">
+        delete from wx_user where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
