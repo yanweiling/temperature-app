@@ -32,6 +32,7 @@ public class UserController extends BaseController
 	private IUserService userService;
 
 	@GetMapping()
+	@ResponseBody
 	public String user()
 	{
 	    return prefix + "/user";

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.windsound.project.mapper.UserinfoMapper">
+    
+    <resultMap type="Userinfo" id="UserinfoResult">
+        <result property="id"    column="id"    />
+        <result property="wxid"    column="wxid"    />
+        <result property="uploadTime"    column="upload_time"    />
+        <result property="isDuty"    column="is_duty"    />
+        <result property="temperature"    column="temperature"    />
+        <result property="currAddress"    column="curr_address"    />
+        <result property="address"    column="address"    />
+        <result property="isSelfFeverCough"    column="is_self_fever_cough"    />
+        <result property="isOtherFeverCough"    column="is_other_fever_cough"    />
+        <result property="isSelfPassWuhan"    column="is_self_pass_wuhan"    />
+        <result property="isOtherPassWuhan"    column="is_other_pass_wuhan"    />
+        <result property="isSelfTouchHubei"    column="is_self_touch_hubei"    />
+        <result property="isOtherTouchHubei"    column="is_other_touch_hubei"    />
+        <result property="isSelfTouchWenzhou"    column="is_self_touch_wenzhou"    />
+        <result property="isOtherTouchWenzhou"    column="is_other_touch_wenzhou"    />
+        <result property="remark"    column="remark"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+	
+	<sql id="selectUserinfoVo">
+        select id, wxid, upload_time, is_duty, temperature, curr_address, address, is_self_fever_cough, is_other_fever_cough, is_self_pass_wuhan, is_other_pass_wuhan, is_self_touch_hubei, is_other_touch_hubei, is_self_touch_wenzhou, is_other_touch_wenzhou, remark, create_time from userinfo
+    </sql>
+	
+    <select id="selectUserinfoList" parameterType="Userinfo" resultMap="UserinfoResult">
+        <include refid="selectUserinfoVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="wxid != null "> and wxid = #{wxid}</if>
+             <if test="uploadTime != null  and uploadTime != '' "> and upload_time = #{uploadTime}</if>
+             <if test="isDuty != null "> and is_duty = #{isDuty}</if>
+             <if test="temperature != null "> and temperature = #{temperature}</if>
+             <if test="currAddress != null  and currAddress != '' "> and curr_address = #{currAddress}</if>
+             <if test="address != null  and address != '' "> and address = #{address}</if>
+             <if test="isSelfFeverCough != null "> and is_self_fever_cough = #{isSelfFeverCough}</if>
+             <if test="isOtherFeverCough != null "> and is_other_fever_cough = #{isOtherFeverCough}</if>
+             <if test="isSelfPassWuhan != null "> and is_self_pass_wuhan = #{isSelfPassWuhan}</if>
+             <if test="isOtherPassWuhan != null "> and is_other_pass_wuhan = #{isOtherPassWuhan}</if>
+             <if test="isSelfTouchHubei != null "> and is_self_touch_hubei = #{isSelfTouchHubei}</if>
+             <if test="isOtherTouchHubei != null "> and is_other_touch_hubei = #{isOtherTouchHubei}</if>
+             <if test="isSelfTouchWenzhou != null "> and is_self_touch_wenzhou = #{isSelfTouchWenzhou}</if>
+             <if test="isOtherTouchWenzhou != null "> and is_other_touch_wenzhou = #{isOtherTouchWenzhou}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectUserinfoById" parameterType="Long" resultMap="UserinfoResult">
+        <include refid="selectUserinfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertUserinfo" parameterType="Userinfo">
+        insert into userinfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="wxid != null  ">wxid,</if>
+			<if test="uploadTime != null  and uploadTime != ''  ">upload_time,</if>
+			<if test="isDuty != null  ">is_duty,</if>
+			<if test="temperature != null  ">temperature,</if>
+			<if test="currAddress != null  and currAddress != ''  ">curr_address,</if>
+			<if test="address != null  and address != ''  ">address,</if>
+			<if test="isSelfFeverCough != null  ">is_self_fever_cough,</if>
+			<if test="isOtherFeverCough != null  ">is_other_fever_cough,</if>
+			<if test="isSelfPassWuhan != null  ">is_self_pass_wuhan,</if>
+			<if test="isOtherPassWuhan != null  ">is_other_pass_wuhan,</if>
+			<if test="isSelfTouchHubei != null  ">is_self_touch_hubei,</if>
+			<if test="isOtherTouchHubei != null  ">is_other_touch_hubei,</if>
+			<if test="isSelfTouchWenzhou != null  ">is_self_touch_wenzhou,</if>
+			<if test="isOtherTouchWenzhou != null  ">is_other_touch_wenzhou,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+			<if test="createTime != null  ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="wxid != null  ">#{wxid},</if>
+			<if test="uploadTime != null  and uploadTime != ''  ">#{uploadTime},</if>
+			<if test="isDuty != null  ">#{isDuty},</if>
+			<if test="temperature != null  ">#{temperature},</if>
+			<if test="currAddress != null  and currAddress != ''  ">#{currAddress},</if>
+			<if test="address != null  and address != ''  ">#{address},</if>
+			<if test="isSelfFeverCough != null  ">#{isSelfFeverCough},</if>
+			<if test="isOtherFeverCough != null  ">#{isOtherFeverCough},</if>
+			<if test="isSelfPassWuhan != null  ">#{isSelfPassWuhan},</if>
+			<if test="isOtherPassWuhan != null  ">#{isOtherPassWuhan},</if>
+			<if test="isSelfTouchHubei != null  ">#{isSelfTouchHubei},</if>
+			<if test="isOtherTouchHubei != null  ">#{isOtherTouchHubei},</if>
+			<if test="isSelfTouchWenzhou != null  ">#{isSelfTouchWenzhou},</if>
+			<if test="isOtherTouchWenzhou != null  ">#{isOtherTouchWenzhou},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateUserinfo" parameterType="Userinfo">
+        update userinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="wxid != null  ">wxid = #{wxid},</if>
+            <if test="uploadTime != null  and uploadTime != ''  ">upload_time = #{uploadTime},</if>
+            <if test="isDuty != null  ">is_duty = #{isDuty},</if>
+            <if test="temperature != null  ">temperature = #{temperature},</if>
+            <if test="currAddress != null  and currAddress != ''  ">curr_address = #{currAddress},</if>
+            <if test="address != null  and address != ''  ">address = #{address},</if>
+            <if test="isSelfFeverCough != null  ">is_self_fever_cough = #{isSelfFeverCough},</if>
+            <if test="isOtherFeverCough != null  ">is_other_fever_cough = #{isOtherFeverCough},</if>
+            <if test="isSelfPassWuhan != null  ">is_self_pass_wuhan = #{isSelfPassWuhan},</if>
+            <if test="isOtherPassWuhan != null  ">is_other_pass_wuhan = #{isOtherPassWuhan},</if>
+            <if test="isSelfTouchHubei != null  ">is_self_touch_hubei = #{isSelfTouchHubei},</if>
+            <if test="isOtherTouchHubei != null  ">is_other_touch_hubei = #{isOtherTouchHubei},</if>
+            <if test="isSelfTouchWenzhou != null  ">is_self_touch_wenzhou = #{isSelfTouchWenzhou},</if>
+            <if test="isOtherTouchWenzhou != null  ">is_other_touch_wenzhou = #{isOtherTouchWenzhou},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteUserinfoById" parameterType="Long">
+        delete from userinfo where id = #{id}
+    </delete>
+	
+    <delete id="deleteUserinfoByIds" parameterType="String">
+        delete from userinfo where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

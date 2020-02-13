@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.windsound.project.mapper.WxuserMapper">
+    
+    <resultMap type="Wxuser" id="WxuserResult">
+        <result property="id"    column="id"    />
+        <result property="ninkName"    column="nink_name"    />
+        <result property="openId"    column="open_id"    />
+        <result property="avatarUrl"    column="avatar_url"    />
+        <result property="name"    column="user_name"    />
+        <result property="idCard"    column="id_card"    />
+        <result property="tel"    column="tel"    />
+    </resultMap>
+	
+	<sql id="selectWxuserVo">
+        select id, nink_name, open_id, avatar_url, user_name, id_card, tel from wxuser
+    </sql>
+	
+    <select id="selectWxuserList" parameterType="Wxuser" resultMap="WxuserResult">
+        <include refid="selectWxuserVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="ninkName != null  and ninkName != '' "> and nink_name = #{ninkName}</if>
+             <if test="openId != null  and openId != '' "> and open_id = #{openId}</if>
+             <if test="avatarUrl != null  and avatarUrl != '' "> and avatar_url = #{avatarUrl}</if>
+             <if test="name != null  and name != '' "> and user_name = #{name}</if>
+             <if test="idCard != null  and idCard != '' "> and id_card = #{idCard}</if>
+             <if test="tel != null  and tel != '' "> and tel = #{tel}</if>
+         </where>
+    </select>
+    
+    <select id="selectWxuserById" parameterType="Long" resultMap="WxuserResult">
+        <include refid="selectWxuserVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertWxuser" parameterType="Wxuser">
+        insert into wxuser
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="ninkName != null  and ninkName != ''  ">nink_name,</if>
+			<if test="openId != null  and openId != ''  ">open_id,</if>
+			<if test="avatarUrl != null  and avatarUrl != ''  ">avatar_url,</if>
+			<if test="name != null  and name != ''  ">user_name,</if>
+			<if test="idCard != null  and idCard != ''  ">id_card,</if>
+			<if test="tel != null  and tel != ''  ">tel,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="ninkName != null  and ninkName != ''  ">#{ninkName},</if>
+			<if test="openId != null  and openId != ''  ">#{openId},</if>
+			<if test="avatarUrl != null  and avatarUrl != ''  ">#{avatarUrl},</if>
+			<if test="name != null  and name != ''  ">#{name},</if>
+			<if test="idCard != null  and idCard != ''  ">#{idCard},</if>
+			<if test="tel != null  and tel != ''  ">#{tel},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateWxuser" parameterType="Wxuser">
+        update wxuser
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ninkName != null  and ninkName != ''  ">nink_name = #{ninkName},</if>
+            <if test="openId != null  and openId != ''  ">open_id = #{openId},</if>
+            <if test="avatarUrl != null  and avatarUrl != ''  ">avatar_url = #{avatarUrl},</if>
+            <if test="name != null  and name != ''  ">user_name = #{name},</if>
+            <if test="idCard != null  and idCard != ''  ">id_card = #{idCard},</if>
+            <if test="tel != null  and tel != ''  ">tel = #{tel},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteWxuserById" parameterType="Long">
+        delete from wxuser where id = #{id}
+    </delete>
+	
+    <delete id="deleteWxuserByIds" parameterType="String">
+        delete from wxuser where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
