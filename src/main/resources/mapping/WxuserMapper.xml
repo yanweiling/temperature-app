@@ -62,13 +62,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update wxuser
         <trim prefix="SET" suffixOverrides=",">
             <if test="ninkName != null  and ninkName != ''  ">nink_name = #{ninkName},</if>
-            <if test="openId != null  and openId != ''  ">open_id = #{openId},</if>
             <if test="avatarUrl != null  and avatarUrl != ''  ">avatar_url = #{avatarUrl},</if>
             <if test="name != null  and name != ''  ">user_name = #{name},</if>
             <if test="idCard != null  and idCard != ''  ">id_card = #{idCard},</if>
             <if test="tel != null  and tel != ''  ">tel = #{tel},</if>
         </trim>
-        where id = #{id}
+        where open_id =  #{openId}
     </update>
 
 	<delete id="deleteWxuserById" parameterType="Long">

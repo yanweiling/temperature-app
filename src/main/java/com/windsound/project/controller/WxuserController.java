@@ -6,12 +6,17 @@ import com.windsound.project.entity.Wxuser;
 import com.windsound.project.service.IWxuserService;
 import jdk.nashorn.internal.objects.annotations.Getter;
 import lombok.extern.java.Log;
+import netscape.javascript.JSObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 微信用户 信息操作处理
@@ -31,7 +36,7 @@ public class WxuserController extends BaseController
 	 */
 	@GetMapping("/list")
 	@ResponseBody
-	public List<Wxuser> list(Wxuser wxuser)
+	public List<Wxuser> list(@RequestBody(required = false) Wxuser wxuser)
 	{
         List<Wxuser> list = wxuserService.selectWxuserList(wxuser);
 		return list;
@@ -67,6 +72,5 @@ public class WxuserController extends BaseController
 	{		
 		return toAjax(wxuserService.updateWxuser(wxuser));
 	}
-	
 
 }

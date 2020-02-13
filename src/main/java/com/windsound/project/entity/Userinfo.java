@@ -3,6 +3,7 @@ package com.windsound.project.entity;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -51,6 +52,23 @@ public class Userinfo
 	private String remark;
 	/** 创建时间 */
 	private Date createTime;
+
+	public static boolean isAllEmpty(Userinfo userinfo){
+		if(userinfo.getIsDuty()==null &&
+		userinfo.getTemperature()==null &&
+				StringUtils.isEmpty(userinfo.getAddress()) &&
+		userinfo.getIsSelfFeverCough()==null &&
+		userinfo.getIsSelfPassWuhan()==null &&
+		userinfo.getIsSelfTouchHubei()==null &&
+		userinfo.getIsSelfTouchWenzhou()==null &&
+		userinfo.getIsOtherFeverCough()==null &&
+		userinfo.getIsOtherPassWuhan()==null &&
+		userinfo.getIsOtherTouchHubei()==null &&
+		userinfo.getIsOtherTouchWenzhou()==null){
+			return true;
+		}
+		return false;
+	}
 
 	public Long getId() {
 		return id;
