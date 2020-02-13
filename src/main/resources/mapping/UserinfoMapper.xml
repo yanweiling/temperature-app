@@ -23,11 +23,78 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="remark"    column="remark"    />
         <result property="createTime"    column="create_time"    />
     </resultMap>
+
+    <resultMap id="userVoResult" type="com.windsound.project.entity.vo.UserVo">
+        <result property="nickName"    column="nink_name"    />
+        <result property="userName"    column="user_name"    />
+        <result property="tel"    column="tel"    />
+        <result property="idCard"    column="id_card"    />
+        <result property="openId"    column="open_id"    />
+        <result property="uploadTime"    column="upload_time"    />
+        <result property="isDuty"    column="is_duty"    />
+        <result property="temperature"    column="temperature"    />
+        <result property="currAddress"    column="curr_address"    />
+        <result property="isSelfFeverCough"    column="is_self_fever_cough"    />
+        <result property="isOtherFeverCough"    column="is_other_fever_cough"    />
+        <result property="isSelfPassWuhan"    column="is_self_pass_wuhan"    />
+        <result property="isOtherPassWuhan"    column="is_other_pass_wuhan"    />
+        <result property="isSelfTouchHubei"    column="is_self_touch_hubei"    />
+        <result property="isOtherTouchHubei"    column="is_other_touch_hubei"    />
+        <result property="remark"    column="remark"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
 	
 	<sql id="selectUserinfoVo">
         select id, wxid, upload_time, is_duty, temperature, curr_address, address, is_self_fever_cough, is_other_fever_cough, is_self_pass_wuhan, is_other_pass_wuhan, is_self_touch_hubei, is_other_touch_hubei, is_self_touch_wenzhou, is_other_touch_wenzhou, remark, create_time from userinfo
     </sql>
-	
+
+
+    <sql id="selectUserVo">
+        select w.nink_name,w.user_name,w.tel,w.id_card,w.open_id,
+u.is_duty,u.temperature,u.upload_time,u.curr_address,u.is_self_fever_cough,u.is_other_fever_cough,u.is_self_pass_wuhan,u.is_other_pass_wuhan,u.is_self_touch_hubei,u.is_other_touch_hubei,u.remark,u.create_time
+from userinfo u inner join wxuser  w on u.wxid=w.id
+    </sql>
+
+    <sql id="selectUserVoCount">
+         select count(1) from userinfo u inner join wxuser  w on u.wxid=w.id
+    </sql>
+
+    <select id="selectUserVoList" parameterType="com.windsound.project.entity.vo.UserVo" resultMap="userVoResult">
+        <include refid="selectUserVo"/>
+        <where>
+            <if test="ninkName != null  and ninkName != '' "> and w.nink_name like concat('%', #{ninkName}, '%')</if>
+            <if test="openId != null  and openId != '' "> and w.open_id = #{openId}</if>
+            <if test="userName != null  and userName != '' "> and w.user_name like  concat('%', #{userName}, '%')</if>
+            <if test="idCard != null  and idCard != '' "> and w.id_card like concat('%', #{idCard}, '%')</if>
+            <if test="tel != null  and tel != '' "> and w.tel like concat('%', #{tel}, '%')</if>
+            <if test="createTime != null "> and date_format(u.create_time,'%y%m%d') = date_format(#{createTime},'%y%m%d')</if>
+        </where>
+    </select>
+
+
+    <select id="selectCount" parameterType="map" resultType="Integer">
+        <include refid="selectUserVoCount"/>
+        <where>
+            <if test="ninkName != null  and ninkName != '' "> and w.nink_name like concat('%', #{ninkName}, '%')</if>
+            <if test="openId != null  and openId != '' "> and w.open_id = #{openId}</if>
+            <if test="userName != null  and userName != '' "> and w.user_name like  concat('%', #{userName}, '%')</if>
+            <if test="idCard != null  and idCard != '' "> and w.id_card like concat('%', #{idCard}, '%')</if>
+            <if test="tel != null  and tel != '' "> and w.tel like concat('%', #{tel}, '%')</if>
+            <if test="uploadTime != null "> and date_format(u.create_time,'%Y%m%d') = #{uploadTime}</if>
+        </where>
+    </select>
+    <select id="selectUserVoListForPage" parameterType="map" resultMap="userVoResult">
+        <include refid="selectUserVo"/>
+        <where>
+            <if test="ninkName != null  and ninkName != '' "> and w.nink_name like concat('%', #{ninkName}, '%')</if>
+            <if test="openId != null  and openId != '' "> and w.open_id = #{openId}</if>
+            <if test="userName != null  and userName != '' "> and w.user_name like  concat('%', #{userName}, '%')</if>
+            <if test="idCard != null  and idCard != '' "> and w.id_card like concat('%', #{idCard}, '%')</if>
+            <if test="tel != null  and tel != '' "> and w.tel like concat('%', #{tel}, '%')</if>
+            <if test="uploadTime != null "> and date_format(u.create_time,'%Y%m%d') = #{uploadTime}</if>
+        </where>
+        limit #{startIndex} ,#{pageSize}
+    </select>
     <select id="selectUserinfoList" parameterType="Userinfo" resultMap="UserinfoResult">
         <include refid="selectUserinfoVo"/>
         <where>  

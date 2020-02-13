@@ -1,29 +1,30 @@
 package com.windsound.project.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.windsound.project.common.AjaxResult;
-import com.windsound.project.common.DateUtils;
+import com.windsound.project.common.excel.ExcelUtil;
 import com.windsound.project.controller.base.BaseController;
-import com.windsound.project.entity.User;
 import com.windsound.project.entity.Userinfo;
-import com.windsound.project.entity.Wxuser;
 import com.windsound.project.entity.po.UserPO;
-import com.windsound.project.service.IUserinfoService;
+import com.windsound.project.entity.vo.UserVo;
 import com.windsound.project.service.IWxuserService;
 import com.windsound.project.service.impl.UserinfoServiceImpl;
-import lombok.extern.java.Log;
+import org.apache.ibatis.annotations.Param;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.PushbackReader;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.*;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 用户 信息操作处理
@@ -35,22 +36,95 @@ import java.util.List;
 @RequestMapping("/userinfo")
 public class UserinfoController extends BaseController
 {
-	
+	private static Logger log= LoggerFactory.getLogger(UserinfoController.class);
 	@Autowired
 	UserinfoServiceImpl userinfoService;
 
 	@Autowired
 	IWxuserService wxuserService;
 
+	/*数据导出*/
+	@PostMapping("/export")
+	@ResponseBody
+	public AjaxResult exportHealthData(String userName, String idCard, String tel){
+		return null;
+	}
+
+	@GetMapping("/downloadData")
+	public AjaxResult downloadScoreImportFailFile(HttpServletRequest request,
+											  HttpServletResponse response ,String userName, String idCard, String tel){
+		InputStream is=null;
+		OutputStream os=null;
+		try {
+			response.setHeader("Content-disposition", "attachment; filename=" + new String("健康信息.xls".getBytes("UTF-8"), "iso-8859-1"));
+			response.setContentType("text/plain");
+			response.setCharacterEncoding("utf-8");
+			UserVo userVo=new UserVo();
+			userVo.setUserName(userName);
+			userVo.setIdCard(idCard);
+			userVo.setTel(tel);
+			List<UserVo> list = userinfoService.selectUserVoList(userVo);
+			ExcelUtil<UserVo> util = new ExcelUtil<UserVo>(UserVo.class);
+			HSSFWorkbook book= util.generateExcel(list, "health");
+			 is = new ByteArrayInputStream(book.getBytes());
+			os=response.getOutputStream();
+			book.write(os);
+			return AjaxResult.success();
+		}catch(Exception e){
+			log.error("下载信息发生异常",e);
+			return AjaxResult.error("下载健康信息发生异常");
+		}finally{
+			try{
+				if(os!=null){
+					os.flush();
+					os.close();
+				}
+				if(is!=null){
+					is.close();
+				}
+
+			}catch(Exception e){
+				log.error("when inputstream or outputstream closed occurs error",e);
+			}
+		}
+	}
+
+
+
+
 	/**
 	 * 查询用户列表
 	 */
 	@GetMapping("/list")
 	@ResponseBody
-	public List<Userinfo> list(@RequestBody(required = false)  Userinfo userinfo)
+	public AjaxResult list(String userName, String idCard, String tel, String uploadTime,
+						   @RequestParam(defaultValue = "1") Integer startPage,
+						   @RequestParam(defaultValue = "5") Integer pageSize)
 	{
-        List<Userinfo> list = userinfoService.selectUserinfoList(userinfo);
-		return list;
+		try{
+			Map<String,Object> param=new HashMap<>();
+			param.put("userName",userName);
+			param.put("idCard",idCard);
+			param.put("tel",tel);
+			param.put("uploadTime",uploadTime);
+			param.put("startIndex",(startPage-1)*pageSize);
+			param.put("pageSize",pageSize);
+			Integer total=userinfoService.selectCount(param);
+			AjaxResult result= AjaxResult.success("查询成功");
+			result.put("startIndex",(startPage-1)*pageSize);
+			result.put("pageSize",pageSize);
+			result.put("total",total);
+			if(total>0){
+				List<UserVo> list = userinfoService.selectUserVoList(param);
+				result.put("data",list);
+			}else{
+				result.put("data", Collections.emptyList());
+			}
+			return result;
+		}catch (Exception e){
+			log.error("分页查询健康信息发生异常",e);
+			return AjaxResult.error("查询信息发生异常");
+		}
 	}
 
 	/**
@@ -103,9 +177,16 @@ public class UserinfoController extends BaseController
 	{		
 		return toAjax(userinfoService.updateUserinfo(userinfo));
 	}
-
-
 	public static void main(String[] args) {
+		UserVo userVo=new UserVo();
+		userVo.setCreateTime(new Date());
+		userVo.setIdCard("111");
+		userVo.setTel("111");
+		userVo.setUserName("zhang");
+		System.out.println(JSON.toJSONString(userVo));
+	}
+
+	private String initUserPoJSON(){
 		UserPO userPO=new UserPO();
 		userPO.setOpenId("oadnu0Gkw7XemE5yyyDpf8-pZo4U");
 		userPO.setIdCard("130729198702242589");
@@ -128,7 +209,7 @@ public class UserinfoController extends BaseController
 		userinfo.setRemark("轻微感冒");
 		userPO.setUserinfo(userinfo);
 		String json= JSON.toJSONString(userPO);
-		System.out.println(json);
+		return json;
 
 	}
 }

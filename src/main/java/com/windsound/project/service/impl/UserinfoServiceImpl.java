@@ -2,12 +2,14 @@ package com.windsound.project.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.windsound.project.common.AjaxResult;
 import com.windsound.project.common.DateUtils;
 import com.windsound.project.entity.Userinfo;
 import com.windsound.project.entity.Wxuser;
 import com.windsound.project.entity.po.UserPO;
+import com.windsound.project.entity.vo.UserVo;
 import com.windsound.project.mapper.UserinfoMapper;
 import com.windsound.project.service.IUserinfoService;
 import com.windsound.project.service.IWxuserService;
@@ -58,7 +60,20 @@ public class UserinfoServiceImpl implements IUserinfoService
 	{
 	    return userinfoMapper.selectUserinfoList(userinfo);
 	}
-	
+
+	@Override
+	public List<UserVo> selectUserVoList(UserVo userVo)
+	{
+		return userinfoMapper.selectUserVoList(userVo);
+	}
+	@Override
+	public List<UserVo> selectUserVoList(Map<String,Object> param){
+		return userinfoMapper.selectUserVoListForPage(param);
+	}
+	@Override
+	public Integer selectCount(Map<String,Object> param){
+		return userinfoMapper.selectCount(param);
+	}
     /**
      * 新增用户
      * 

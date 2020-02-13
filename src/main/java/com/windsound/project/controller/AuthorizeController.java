@@ -40,11 +40,14 @@ public class AuthorizeController {
             params.append("secret=").append(SECRET).append("&");
             params.append("grant_type=").append(GRANT_TYPE).append("&");
             params.append("js_code=").append(jsCode);
-            URL=URL+params.toString();
-            ResponseEntity<String> responseEntity=restTemplate.getForEntity(URL, String.class);
+            String localURL=URL+params.toString();
+            log.info(localURL);
+
+            ResponseEntity<String> responseEntity=restTemplate.getForEntity(localURL, String.class);
             if(responseEntity.getStatusCode()!= HttpStatus.OK){
                 return AjaxResult.error("微信授权失败");
             }
+            log.info(responseEntity.getBody().toString());
             String openId=JSONObject.parseObject(responseEntity.getBody()).getString("openid");
             if(!StringUtils.isEmpty(openId)){
                 Wxuser wxuser=new Wxuser();
@@ -56,9 +59,13 @@ public class AuthorizeController {
                 }
             }else{
                 log.warn("该jsCode已经使用过了");
+                return AjaxResult.error("该jsCode已经使用过了");
             }
+            AjaxResult result= AjaxResult.success();
+            result.put("msg","授权成功");
+            result.put("openid",openId);
 
-            return AjaxResult.success("授权成功");
+            return result;
         }catch (Exception e){
             log.error("授权接口发生异常",e);
             return AjaxResult.error("授权接口发生异常");

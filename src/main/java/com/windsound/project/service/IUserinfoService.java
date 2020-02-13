@@ -1,8 +1,10 @@
 package com.windsound.project.service;
 
 import com.windsound.project.entity.Userinfo;
+import com.windsound.project.entity.vo.UserVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户 服务层
@@ -27,7 +29,12 @@ public interface IUserinfoService
      * @return 用户集合
      */
 	public List<Userinfo> selectUserinfoList(Userinfo userinfo);
-	
+
+	public List<UserVo> selectUserVoList(UserVo userVo);
+
+	public List<UserVo> selectUserVoList(Map<String,Object> param);
+
+	public Integer selectCount(Map<String,Object> param);
 	/**
      * 新增用户
      * 
