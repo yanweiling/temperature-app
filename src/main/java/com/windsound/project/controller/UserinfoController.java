@@ -52,7 +52,7 @@ public class UserinfoController extends BaseController
 
 	@GetMapping("/downloadData")
 	public AjaxResult downloadScoreImportFailFile(HttpServletRequest request,
-											  HttpServletResponse response ,String userName, String idCard, String tel){
+											  HttpServletResponse response ,String userName, String idCard, String tel,String uploadTime){
 		InputStream is=null;
 		OutputStream os=null;
 		try {
@@ -63,13 +63,14 @@ public class UserinfoController extends BaseController
 			userVo.setUserName(userName);
 			userVo.setIdCard(idCard);
 			userVo.setTel(tel);
+			userVo.setUploadTime(uploadTime);
 			List<UserVo> list = userinfoService.selectUserVoList(userVo);
 			ExcelUtil<UserVo> util = new ExcelUtil<UserVo>(UserVo.class);
 			HSSFWorkbook book= util.generateExcel(list, "health");
 			 is = new ByteArrayInputStream(book.getBytes());
 			os=response.getOutputStream();
 			book.write(os);
-			return AjaxResult.success();
+			return AjaxResult.success().put("total",list.size());
 		}catch(Exception e){
 			log.error("下载信息发生异常",e);
 			return AjaxResult.error("下载健康信息发生异常");
@@ -82,7 +83,6 @@ public class UserinfoController extends BaseController
 				if(is!=null){
 					is.close();
 				}
-
 			}catch(Exception e){
 				log.error("when inputstream or outputstream closed occurs error",e);
 			}
@@ -99,7 +99,7 @@ public class UserinfoController extends BaseController
 	@ResponseBody
 	public AjaxResult list(String userName, String idCard, String tel, String uploadTime,
 						   @RequestParam(defaultValue = "1") Integer startPage,
-						   @RequestParam(defaultValue = "5") Integer pageSize)
+						   @RequestParam(defaultValue = "10") Integer pageSize)
 	{
 		try{
 			Map<String,Object> param=new HashMap<>();

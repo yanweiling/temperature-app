@@ -68,6 +68,7 @@ from userinfo u inner join wxuser  w on u.wxid=w.id
             <if test="idCard != null  and idCard != '' "> and w.id_card like concat('%', #{idCard}, '%')</if>
             <if test="tel != null  and tel != '' "> and w.tel like concat('%', #{tel}, '%')</if>
             <if test="createTime != null "> and date_format(u.create_time,'%y%m%d') = date_format(#{createTime},'%y%m%d')</if>
+            <if test="uploadTime != null  and uploadTime != '' "> and u.upload_time=#{uploadTime}</if>
         </where>
     </select>
 
