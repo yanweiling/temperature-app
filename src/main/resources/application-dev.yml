@@ -22,5 +22,8 @@ logging:
     com:
       windsound:
         project:
-          mapper: debug
+          mapper: info
+  # 默认是 log4j2-spring.xml
+#  config: log4j2.xml
+
 

@@ -74,8 +74,10 @@ public class UserVo {
         switch (this.isDuty){
             case 1:
                 setIsDutyDesc("否");
+                break;
             case 2:
                 setIsDutyDesc("是");
+                break;
         }
     }
 
@@ -84,8 +86,10 @@ public class UserVo {
         switch (this.isSelfFeverCough){
             case 1:
                 setIsSelfFeverCoughDesc("否");
+                break;
             case 2:
                 setIsSelfFeverCoughDesc("是");
+                break;
         }
     }
 
@@ -95,8 +99,10 @@ public class UserVo {
         switch (this.isOtherFeverCough){
             case 1:
                 setIsOtherFeverCoughDesc("否");
+                break;
             case 2:
                 setIsOtherFeverCoughDesc("是");
+                break;
         }
     }
 
@@ -105,8 +111,10 @@ public class UserVo {
         switch (this.isSelfPassWuhan){
             case 1:
                 setIsSelfPassWuhanDesc("否");
+                break;
             case 2:
                 setIsSelfPassWuhanDesc("是");
+                break;
         }
     }
 
@@ -115,8 +123,10 @@ public class UserVo {
         switch (this.isOtherPassWuhan){
             case 1:
                 setIsOtherPassWuhanDesc("否");
+                break;
             case 2:
                 setIsOtherPassWuhanDesc("是");
+                break;
         }
     }
 
@@ -125,24 +135,28 @@ public class UserVo {
         switch (this.isSelfTouchHubei){
             case 1:
                 setIsSelfTouchHubeiDesc("否");
+                break;
             case 2:
                 setIsSelfTouchHubeiDesc("是");
+                break;
         }
     }
 
-    public void setIsOtherTouchHubei(Integer isOtherTouchHubei) {
+    public  void setIsOtherTouchHubei(Integer isOtherTouchHubei) {
         this.isOtherTouchHubei = isOtherTouchHubei;
         switch (this.isOtherTouchHubei){
             case 1:
                 setIsOtherTouchHubeiDesc("否");
+                break;
             case 2:
                 setIsOtherTouchHubeiDesc("是");
+                break;
         }
     }
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-        String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd hh:mm:ss";
-        SimpleDateFormat format=new SimpleDateFormat();
+        String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
+        SimpleDateFormat format=new SimpleDateFormat(YYYY_MM_DD_HH_MM_SS);
         setCreateTimeDesc(format.format(createTime));
     }
 }
