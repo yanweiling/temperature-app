@@ -32,6 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="openId"    column="open_id"    />
         <result property="uploadTime"    column="upload_time"    />
         <result property="isDuty"    column="is_duty"    />
+        <result property="orderKey"    column="order_key"    />
         <result property="temperature"    column="temperature"    />
         <result property="currAddress"    column="curr_address"    />
         <result property="isSelfFeverCough"    column="is_self_fever_cough"    />
@@ -51,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectUserVo">
         select w.nink_name,w.user_name,w.tel,w.id_card,w.open_id,
-u.is_duty,u.temperature,u.upload_time,u.curr_address,u.is_self_fever_cough,u.is_other_fever_cough,u.is_self_pass_wuhan,u.is_other_pass_wuhan,u.is_self_touch_hubei,u.is_other_touch_hubei,u.remark,u.create_time
+u.is_duty,u.temperature,u.upload_time,u.curr_address,u.is_self_fever_cough,u.is_other_fever_cough,u.is_self_pass_wuhan,u.is_other_pass_wuhan,u.is_self_touch_hubei,u.is_other_touch_hubei,u.remark,u.create_time,w.order_key
 from userinfo u inner join wxuser  w on u.wxid=w.id
     </sql>
 
@@ -119,6 +120,15 @@ from userinfo u inner join wxuser  w on u.wxid=w.id
              <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
              <if test="createTime != null "> and create_time = #{createTime}</if>
          </where>
+    </select>
+
+    <select id="selectUserinfo" parameterType="Userinfo" resultMap="UserinfoResult">
+        <include refid="selectUserinfoVo"/>
+        <where>
+            <if test="wxid != null "> and wxid = #{wxid}</if>
+        </where>
+        order by upload_time desc ,create_time desc
+        limit 1
     </select>
     
     <select id="selectUserinfoById" parameterType="Long" resultMap="UserinfoResult">

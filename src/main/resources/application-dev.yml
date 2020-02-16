@@ -1,17 +1,17 @@
 server:
   port: 8080
-#spring:
-#  datasource:
-#    username: root
-#    password: 123456
-#    url: jdbc:mysql://localhost:3306/swan?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
-#    driver-class-name: com.mysql.cj.jdbc.Driver
 spring:
   datasource:
-    username: lxzroot
-    password: 20121231Ly
-    url: jdbc:mysql://rm-bp1px836m5rvb3idm9o.mysql.rds.aliyuncs.com:3306/swan?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/swan?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
+#spring:
+#  datasource:
+#    username: lxzroot
+#    password: 20121231Ly
+#    url: jdbc:mysql://rm-bp1px836m5rvb3idm9o.mysql.rds.aliyuncs.com:3306/swan?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+#    driver-class-name: com.mysql.cj.jdbc.Driver
 mybatis:
   mapper-locations: classpath:mapping/*Mapper.xml
   type-aliases-package: com.windsound.project.entity

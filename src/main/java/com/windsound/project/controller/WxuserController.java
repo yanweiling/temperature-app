@@ -63,15 +63,18 @@ public class WxuserController extends BaseController
 			}
 			Wxuser user=list.get(0);
 			Long wxuserId=user.getId();
-			String today= DateUtils.getDate();
+
 			Userinfo userinfo=new Userinfo();
 			userinfo.setWxid(wxuserId);
-			userinfo.setUploadTime(today);
-			List<Userinfo> userinfos=userinfoService.selectUserinfoList(userinfo);
+			List<Userinfo> userinfos=userinfoService.selectUserinfo(userinfo);
 			AjaxResult result= AjaxResult.success();
 			result.put("user",user);
 			if(!CollectionUtils.isEmpty(userinfos)){
-				result.put("healthinfo",userinfos.get(0));
+				Userinfo info=userinfos.get(0);
+				String today= DateUtils.getDate();
+				if(!today.equals(info.getUploadTime()))
+					info.setTemperature(null);
+				result.put("healthinfo",info);
 			}
 			return result;
 		}catch (Exception e){

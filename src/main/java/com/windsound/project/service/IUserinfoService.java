@@ -30,6 +30,8 @@ public interface IUserinfoService
      */
 	public List<Userinfo> selectUserinfoList(Userinfo userinfo);
 
+	public List<Userinfo> selectUserinfo(Userinfo userinfo);
+
 	public List<UserVo> selectUserVoList(UserVo userVo);
 
 	public List<UserVo> selectUserVoList(Map<String,Object> param);

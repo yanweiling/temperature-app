@@ -62,6 +62,11 @@ public class UserinfoServiceImpl implements IUserinfoService
 	}
 
 	@Override
+	public List<Userinfo> selectUserinfo(Userinfo userinfo){
+		return userinfoMapper.selectUserinfo(userinfo);
+	}
+
+	@Override
 	public List<UserVo> selectUserVoList(UserVo userVo)
 	{
 		return userinfoMapper.selectUserVoList(userVo);

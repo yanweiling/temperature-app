@@ -18,7 +18,8 @@ import java.util.Date;
 @Setter
 public class UserVo {
     //wxuser信息
-
+    @Excel(name = "序号")
+    private Integer orderKey;
     private String ninkName;
     @Excel(name = "用户名称")
     private String userName;

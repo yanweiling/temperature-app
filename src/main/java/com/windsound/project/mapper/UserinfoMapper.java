@@ -32,6 +32,8 @@ public interface UserinfoMapper
      */
 	public List<Userinfo> selectUserinfoList(Userinfo userinfo);
 
+	public List<Userinfo> selectUserinfo(Userinfo userinfo);
+
 	public List<UserVo> selectUserVoList(UserVo userVo);
 
 	public List<UserVo> selectUserVoListForPage(Map<String,Object> param);
