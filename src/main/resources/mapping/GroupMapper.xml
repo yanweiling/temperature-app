@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.windsound.project.mapper.GroupMapper">
+    
+    <resultMap type="Group" id="GroupResult">
+        <result property="id"    column="id"    />
+        <result property="groupPid"    column="group_pid"    />
+        <result property="groupName"    column="group_name"    />
+        <result property="address"    column="address"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+	
+	<sql id="selectGroupVo">
+        select id, group_pid, group_name, address, audit_status, create_time from institution
+    </sql>
+	
+    <select id="selectGroupList" parameterType="Group" resultMap="GroupResult">
+        <include refid="selectGroupVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="groupPid != null  and groupPid != '' "> and group_pid = #{groupPid}</if>
+             <if test="groupName != null  and groupName != '' "> and group_name = #{groupName}</if>
+             <if test="address != null  and address != '' "> and address = #{address}</if>
+             <if test="auditStatus != null "> and audit_status = #{auditStatus}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectGroupById" parameterType="Long" resultMap="GroupResult">
+        <include refid="selectGroupVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertGroup" parameterType="Group">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into institution
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  ">id,</if>
+			<if test="groupPid != null  and groupPid != ''  ">group_pid,</if>
+			<if test="groupName != null  and groupName != ''  ">group_name,</if>
+			<if test="address != null  and address != ''  ">address,</if>
+			<if test="auditStatus != null  ">audit_status,</if>
+			<if test="createTime != null  ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  ">#{id},</if>
+			<if test="groupPid != null  and groupPid != ''  ">#{groupPid},</if>
+			<if test="groupName != null  and groupName != ''  ">#{groupName},</if>
+			<if test="address != null  and address != ''  ">#{address},</if>
+			<if test="auditStatus != null  ">#{auditStatus},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateGroup" parameterType="Group">
+        update institution
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="groupPid != null  and groupPid != ''  ">group_pid = #{groupPid},</if>
+            <if test="groupName != null  and groupName != ''  ">group_name = #{groupName},</if>
+            <if test="address != null  and address != ''  ">address = #{address},</if>
+            <if test="auditStatus != null  ">audit_status = #{auditStatus},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteGroupById" parameterType="Long">
+        delete from institution where id = #{id}
+    </delete>
+	
+    <delete id="deleteGroupByIds" parameterType="String">
+        delete from institution where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.windsound.project.mapper.AdminMapper">
+    
+    <resultMap type="Admin" id="AdminResult">
+        <result property="id"    column="id"    />
+        <result property="loginName"    column="login_name"    />
+        <result property="loginPwd"    column="login_pwd"    />
+        <result property="createDate"    column="create_date"    />
+    </resultMap>
+	
+	<sql id="selectAdminVo">
+        select id, login_name, login_pwd, create_date from admin
+    </sql>
+    <select id="selectAdmin" parameterType="Admin" resultMap="AdminResult">
+        select id, login_name, login_pwd, create_date from admin
+        <where>
+            <if test="loginName != null  and loginName != '' "> and login_name = #{loginName}</if>
+            <if test="loginPwd != null  and loginPwd != '' "> and login_pwd = #{loginPwd}</if>
+        </where>
+    </select>
+
+    <select id="selectAdminList" parameterType="Admin" resultMap="AdminResult">
+        <include refid="selectAdminVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="loginName != null  and loginName != '' "> and login_name = #{loginName}</if>
+             <if test="loginPwd != null  and loginPwd != '' "> and login_pwd = #{loginPwd}</if>
+             <if test="createDate != null "> and create_date = #{createDate}</if>
+         </where>
+    </select>
+    
+    <select id="selectAdminById" parameterType="Long" resultMap="AdminResult">
+        <include refid="selectAdminVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAdmin" parameterType="Admin">
+     <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+        SELECT LAST_INSERT_ID()
+    </selectKey>
+        insert into admin
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="loginName != null  and loginName != ''  ">login_name,</if>
+			<if test="loginPwd != null  and loginPwd != ''  ">login_pwd,</if>
+			<if test="createDate != null  ">create_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="loginName != null  and loginName != ''  ">#{loginName},</if>
+			<if test="loginPwd != null  and loginPwd != ''  ">#{loginPwd},</if>
+			<if test="createDate != null  ">#{createDate},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateAdmin" parameterType="Admin">
+        update admin
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="loginName != null  and loginName != ''  ">login_name = #{loginName},</if>
+            <if test="loginPwd != null  and loginPwd != ''  ">login_pwd = #{loginPwd},</if>
+            <if test="createDate != null  ">create_date = #{createDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteAdminById" parameterType="Long">
+        delete from admin where id = #{id}
+    </delete>
+	
+    <delete id="deleteAdminByIds" parameterType="String">
+        delete from admin where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

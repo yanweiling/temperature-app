@@ -159,4 +159,10 @@ public class UserVo {
         SimpleDateFormat format=new SimpleDateFormat(YYYY_MM_DD_HH_MM_SS);
         setCreateTimeDesc(format.format(createTime));
     }
+
+    public static void main(String[] args) {
+        UserVo vo=new UserVo();
+        vo.setIsOtherFeverCough(2);
+        System.out.println(vo.getIsOtherFeverCoughDesc());
+    }
 }

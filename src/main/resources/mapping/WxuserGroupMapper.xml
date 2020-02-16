@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.windsound.project.mapper.WxuserGroupMapper">
+    
+    <resultMap type="WxuserGroup" id="WxuserGroupResult">
+        <result property="id"    column="id"    />
+        <result property="wxuserId"    column="wxuser_id"    />
+        <result property="groupId"    column="group_id"    />
+    </resultMap>
+	
+	<sql id="selectWxuserGroupVo">
+        select id, wxuser_id, group_id from wxuser_group
+    </sql>
+	
+    <select id="selectWxuserGroupList" parameterType="WxuserGroup" resultMap="WxuserGroupResult">
+        <include refid="selectWxuserGroupVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="wxuserId != null "> and wxuser_id = #{wxuserId}</if>
+             <if test="groupId != null "> and group_id = #{groupId}</if>
+         </where>
+    </select>
+    
+    <select id="selectWxuserGroupById" parameterType="Long" resultMap="WxuserGroupResult">
+        <include refid="selectWxuserGroupVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertWxuserGroup" parameterType="WxuserGroup">
+        insert into wxuser_group
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="wxuserId != null  ">wxuser_id,</if>
+			<if test="groupId != null  ">group_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="wxuserId != null  ">#{wxuserId},</if>
+			<if test="groupId != null  ">#{groupId},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateWxuserGroup" parameterType="WxuserGroup">
+        update wxuser_group
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="wxuserId != null  ">wxuser_id = #{wxuserId},</if>
+            <if test="groupId != null  ">group_id = #{groupId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteWxuserGroupById" parameterType="Long">
+        delete from wxuser_group where id = #{id}
+    </delete>
+	
+    <delete id="deleteWxuserGroupByIds" parameterType="String">
+        delete from wxuser_group where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

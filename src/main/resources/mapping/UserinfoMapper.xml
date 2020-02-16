@@ -70,6 +70,7 @@ from userinfo u inner join wxuser  w on u.wxid=w.id
             <if test="createTime != null "> and date_format(u.create_time,'%y%m%d') = date_format(#{createTime},'%y%m%d')</if>
             <if test="uploadTime != null  and uploadTime != '' "> and u.upload_time=#{uploadTime}</if>
         </where>
+        order by order_key asc
     </select>
 
 
@@ -94,6 +95,7 @@ from userinfo u inner join wxuser  w on u.wxid=w.id
             <if test="tel != null  and tel != '' "> and w.tel like concat('%', #{tel}, '%')</if>
             <if test="uploadTime != null "> and date_format(u.create_time,'%Y%m%d') = #{uploadTime}</if>
         </where>
+        order by order_key asc
         limit #{startIndex} ,#{pageSize}
     </select>
     <select id="selectUserinfoList" parameterType="Userinfo" resultMap="UserinfoResult">

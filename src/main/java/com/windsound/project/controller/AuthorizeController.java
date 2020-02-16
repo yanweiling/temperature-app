@@ -3,7 +3,11 @@ package com.windsound.project.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.windsound.project.common.AjaxResult;
+import com.windsound.project.entity.Group;
 import com.windsound.project.entity.Wxuser;
+import com.windsound.project.entity.WxuserGroup;
+import com.windsound.project.service.IGroupService;
+import com.windsound.project.service.IWxuserGroupService;
 import com.windsound.project.service.IWxuserService;
 import lombok.extern.java.Log;
 import org.slf4j.Logger;
@@ -29,7 +33,11 @@ public class AuthorizeController {
 
     @Autowired
     IWxuserService wxuserService;
+    @Autowired
+    IWxuserGroupService wxuserGroupService;
 
+    @Autowired
+    IGroupService groupService;
     @PostMapping("/code2Session")
     @ResponseBody
     public  AjaxResult code2Session(@RequestParam String jsCode){
@@ -56,16 +64,30 @@ public class AuthorizeController {
                 if(CollectionUtils.isEmpty(list)){
                     wxuserService.insertWxuser(wxuser);
                     log.info("用户成功保存到数据库");
+                    AjaxResult result= AjaxResult.success();
+                    result.put("msg","授权成功");
+                    result.put("openid",openId);
+                    return result;
+                }else{
+                    Long wxuserId=list.get(0).getId();
+                    //获取关联的机构id
+                    WxuserGroup wxuserGroup=new WxuserGroup();
+                    wxuserGroup.setWxuserId(wxuserId);
+                    List<WxuserGroup> wxuserGroups=wxuserGroupService.selectWxuserGroupList(wxuserGroup);
+                    AjaxResult result= AjaxResult.success();
+                    result.put("msg","授权成功");
+                    result.put("openid",openId);
+                    if(!CollectionUtils.isEmpty(wxuserGroups)){
+                        Long groupId=wxuserGroups.get(0).getGroupId();
+                        Group group=groupService.selectGroupById(groupId);
+                        result.put("groupInfo",group);
+                    }
+                    return result;
                 }
             }else{
                 log.warn("该jsCode已经使用过了");
                 return AjaxResult.error("该jsCode已经使用过了");
             }
-            AjaxResult result= AjaxResult.success();
-            result.put("msg","授权成功");
-            result.put("openid",openId);
-
-            return result;
         }catch (Exception e){
             log.error("授权接口发生异常",e);
             return AjaxResult.error("授权接口发生异常");
